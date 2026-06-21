@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fichas de Costo DUNAX</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%231b3a5b'/%3E%3Crect%20x='15'%20y='11'%20width='30'%20height='42'%20rx='4'%20fill='%23ffffff'/%3E%3Crect%20x='21'%20y='19'%20width='18'%20height='3'%20rx='1.5'%20fill='%232c5d8a'/%3E%3Crect%20x='21'%20y='27'%20width='18'%20height='3'%20rx='1.5'%20fill='%23c9d6e4'/%3E%3Crect%20x='21'%20y='35'%20width='12'%20height='3'%20rx='1.5'%20fill='%23c9d6e4'/%3E%3Ccircle%20cx='45'%20cy='45'%20r='12'%20fill='%23e8472b'/%3E%3Cpath%20d='M39.5%2045%20l4%204%20l7%20-8'%20fill='none'%20stroke='%23ffffff'%20stroke-width='3.2'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --azul:#1b3a5b; --azul2:#2c5d8a; --acento:#e8472b; --ok:#1e8e4e;
+    --gris:#f4f6f9; --linea:#dde3ea; --texto:#1c2733; --suave:#6b7a8d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,Arial,sans-serif;background:var(--gris);color:var(--texto);font-size:15px;line-height:1.45}
+  header{background:var(--azul);color:#fff;padding:0 18px;display:flex;align-items:center;gap:18px;box-shadow:0 2px 8px rgba(0,0,0,.15);position:sticky;top:0;z-index:50}
+  header .logo{flex:0 0 auto;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
+  header h1{font-size:18px;font-weight:600;letter-spacing:.5px;padding:14px 0;margin-left:-8px}
+  header h1 b{color:#ffce3a}
+  nav{display:flex;gap:4px;margin-left:auto}
+  nav button{background:transparent;border:none;color:#cdd9e6;padding:16px 16px;font-size:14px;cursor:pointer;border-bottom:3px solid transparent;font-weight:500}
+  nav button:hover{color:#fff}
+  nav button.activo{color:#fff;border-bottom-color:#ffce3a}
+  main{max-width:1080px;margin:22px auto;padding:0 18px 60px}
+  .card{background:#fff;border:1px solid var(--linea);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  h2{font-size:19px;color:var(--azul);margin-bottom:4px}
+  h3{font-size:15px;color:var(--azul2);margin:18px 0 8px;border-bottom:1px solid var(--linea);padding-bottom:6px}
+  .sub{color:var(--suave);font-size:13px;margin-bottom:14px}
+  label{display:block;font-size:13px;color:var(--suave);margin-bottom:4px;font-weight:500}
+  input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--linea);border-radius:7px;font-size:14px;font-family:inherit;background:#fff}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--azul2);box-shadow:0 0 0 3px rgba(44,93,138,.12)}
+  .grid{display:grid;gap:12px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .btn{background:var(--azul2);color:#fff;border:none;padding:10px 16px;border-radius:7px;font-size:14px;cursor:pointer;font-weight:600}
+  .btn:hover{background:var(--azul)}
+  .btn.acento{background:var(--acento)} .btn.acento:hover{filter:brightness(.92)}
+  .btn.ok{background:var(--ok)} .btn.ok:hover{filter:brightness(.92)}
+  .btn.gris{background:#e6ebf1;color:var(--texto)} .btn.gris:hover{background:#d8dfe8}
+  .btn.sm{padding:6px 11px;font-size:13px}
+  .fila-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--linea);vertical-align:middle}
+  th{color:var(--suave);font-size:12px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  td input,td select{padding:6px 7px}
+  .num{text-align:right;font-variant-numeric:tabular-nums}
+  .tachar{background:none;border:none;color:var(--acento);cursor:pointer;font-size:18px;line-height:1}
+  .lista-ficha{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .ficha-item{border:1px solid var(--linea);border-radius:9px;padding:14px;cursor:pointer;background:#fff;transition:.12s}
+  .ficha-item:hover{border-color:var(--azul2);box-shadow:0 3px 10px rgba(0,0,0,.08)}
+  .ficha-item .serv{font-weight:600;color:var(--azul);font-size:15px}
+  .ficha-item .cli{color:var(--suave);font-size:13px;margin:3px 0 10px}
+  .ficha-item .precio{font-size:20px;font-weight:700;color:var(--acento)}
+  .ficha-item .precio small{font-size:12px;color:var(--suave);font-weight:500}
+  .panel-calc{background:linear-gradient(135deg,#1b3a5b,#2c5d8a);color:#fff;border-radius:10px;padding:18px;position:sticky;top:70px}
+  .panel-calc .row{display:flex;justify-content:space-between;padding:5px 0;font-size:14px;border-bottom:1px solid rgba(255,255,255,.12)}
+  .panel-calc .row.tot{font-size:17px;font-weight:700;border-bottom:none;margin-top:6px;padding-top:10px;border-top:2px solid rgba(255,255,255,.3)}
+  .panel-calc .row .v{font-variant-numeric:tabular-nums}
+  .panel-calc small{color:#aecbe8}
+  .editor-grid{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:start}
+  .pill{display:inline-block;background:#eef3f8;color:var(--azul2);padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600}
+  .aviso{background:#fff7e6;border:1px solid #ffd98a;border-radius:8px;padding:12px 14px;font-size:13px;color:#7a5b00;margin-bottom:14px}
+  .vacio{text-align:center;color:var(--suave);padding:40px 20px}
+  .top-acciones{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+  .top-acciones .btn{margin-left:auto}
+  .mini{font-size:12px;color:var(--suave);margin-top:3px}
+  @media(max-width:820px){.editor-grid{grid-template-columns:1fr}.g3,.g4{grid-template-columns:1fr 1fr}.panel-calc{position:static}}
+  /* impresion */
+  #impresion{display:none}
+  @media print{
+    body *{visibility:hidden}
+    #impresion,#impresion *{visibility:visible}
+    #impresion{display:block;position:absolute;left:0;top:0;width:100%}
+    @page{margin:14mm}
+  }
+  .doc{font-size:12px;color:#000}
+  .doc h2{text-align:center;color:#000;font-size:15px;margin:2px 0}
+  .doc .empresa{display:flex;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:10px}
+  .doc table{font-size:11.5px}
+  .doc th,.doc td{border:1px solid #888;padding:5px 7px}
+  .doc .seccion{background:#e9eef4;font-weight:700}
+  .doc .total{background:#1b3a5b;color:#fff;font-weight:700}
+  .doc .pie{margin-top:14px;font-size:11px;line-height:1.6}
+</style>
+</head>
+<body>
+<header>
+  <svg class="logo" viewBox="0 0 64 64" width="30" height="30" aria-hidden="true">
+    <rect width="64" height="64" rx="14" fill="#13314f"/>
+    <rect x="15" y="11" width="30" height="42" rx="4" fill="#ffffff"/>
+    <rect x="21" y="19" width="18" height="3" rx="1.5" fill="#2c5d8a"/>
+    <rect x="21" y="27" width="18" height="3" rx="1.5" fill="#c9d6e4"/>
+    <rect x="21" y="35" width="12" height="3" rx="1.5" fill="#c9d6e4"/>
+    <circle cx="45" cy="45" r="12" fill="#e8472b"/>
+    <path d="M39.5 45 l4 4 l7 -8" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <h1>Fichas de Costo <b>·</b> <span id="hdrEmpresa">DUNAX</span></h1>
+  <nav>
+    <button data-vista="fichas" class="activo">Mis Fichas</button>
+    <button data-vista="catalogo">Catálogo</button>
+    <button data-vista="empresa">Empresa</button>
+    <button data-vista="respaldo">Respaldo</button>
+  </nav>
+</header>
+<main id="app"></main>
+<div id="impresion"></div>
+
+<script>
+/* =========================================================================
+   FICHAS DE COSTO · Modelo oficial MFP (Resolución 148/2023)
+   Motor de cálculo replicado de la ficha modelo en Excel (FormatoOficial).
+   Comprobado: con los datos de la bomba sumergible da exactamente 524 000.
+   ========================================================================= */
+const LS = "fichasDunax_v2";
+const RATES_DEF = {
+  ventas:10, local:1, fuerzaTrabajo:5, segSocial:12.5, segSocialCP:1.5,
+  vacaciones:9.09, utilidades:35, reserva:10, margenServicio:15, margenProduccion:25
+};
+let DB = cargar();
+
+function cargar(){
+  const raw = localStorage.getItem(LS);
+  if(raw){ try{ return JSON.parse(raw); }catch(e){} }
+  return semilla();
+}
+function guardar(){ localStorage.setItem(LS, JSON.stringify(DB)); }
+
+function semilla(){
+  return {
+    empresa:{
+      nombre:"DUNAX S.R.L.", nit:"5000 4414 217", sucursal:"326",
+      direccion:"Calle 4ta Edif. G-01 Apto 3 e/ G y Aldabó, Altahabana, Boyeros, La Habana",
+      cuenta:"0536245000761315", telefono:"(+53) 5697 8275",
+      validez:15, garantia:6, formaPago:"Transferencia bancaria", anticipo:50
+    },
+    rates:{...RATES_DEF},
+    catalogo:[
+      {id:id(),nombre:"Bomba sumergible",um:"unidad",precio:206800},
+      {id:id(),nombre:"Tubería",um:"metro",precio:11735.18},
+      {id:id(),nombre:"Piezas de acople",um:"unidad",precio:9392.79},
+      {id:id(),nombre:"Cable eléctrico",um:"metro",precio:3415.56},
+      {id:id(),nombre:"Insumos gastables",um:"unidad",precio:474.385},
+      {id:id(),nombre:"Calentador de agua 80L",um:"unidad",precio:309375},
+      {id:id(),nombre:"Presurizador",um:"unidad",precio:140625},
+      {id:id(),nombre:"Panel solar TOPCON 550W",um:"unidad",precio:0},
+      {id:id(),nombre:"Inversor 3KW 110/220V",um:"unidad",precio:0}
+    ],
+    fichas:[ fichaBomba() ]
+  };
+}
+// Ficha de ejemplo: instalación de bomba sumergible (Hospital Cira García).
+// Reproduce exactamente la ficha de costo del MFP y la oferta = 524 000.
+function fichaBomba(){
+  return {
+    id:id(), servicio:"Instalación de bomba sumergible", cliente:"Hospital Cira García",
+    tipo:"servicio", um:"unidad", moneda:"CUP", fecha:hoy(),
+    insumos:[
+      {nombre:"Bomba sumergible",um:"unidad",precio:206800,cantidad:1},
+      {nombre:"Tubería",um:"metro",precio:11735.18,cantidad:10},
+      {nombre:"Piezas de acople",um:"unidad",precio:9392.79,cantidad:4},
+      {nombre:"Cable eléctrico",um:"metro",precio:3415.56,cantidad:10},
+      {nombre:"Insumos gastables",um:"unidad",precio:474.385,cantidad:2}
+    ],
+    combustibles:0, energia:0, agua:0,
+    salarios:[
+      {actividad:"Preparación del sitio y medidas de seguridad eléctrica",trabajadores:2,horas:4,salarioHora:125},
+      {actividad:"Montaje de tubería de descarga y válvula check",trabajadores:2,horas:4,salarioHora:125},
+      {actividad:"Conexión de cable de uso rudo e interruptor de flotador",trabajadores:2,horas:2,salarioHora:200},
+      {actividad:"Descenso y posicionamiento de la bomba",trabajadores:2,horas:5,salarioHora:125},
+      {actividad:"Conexión de tubería a la red de distribución",trabajadores:1,horas:1,salarioHora:125},
+      {actividad:"Pruebas de funcionamiento y ajuste de flotador",trabajadores:2,horas:2,salarioHora:200},
+      {actividad:"Conexión eléctrica al tablero con termomagnético",trabajadores:2,horas:2,salarioHora:200}
+    ],
+    otrosDirectos:0,
+    transporte:14231.5, amortizacion:2500,
+    generales:1210, distribucion:0, financieros:130, osde:0,
+    modoPrecio:'fijo', precioObjetivo:524000, margen:10, precioAjustado:524000,
+    notas:"", validez:15, garantia:6, formaPago:"Transferencia bancaria", anticipo:50
+  };
+}
+function id(){ return Math.random().toString(36).slice(2,10); }
+function hoy(){ return new Date().toISOString().slice(0,10); }
+
+/* ========================= CÁLCULO (modelo oficial MFP) =========================
+   Filas del modelo:
+     1  Gasto Material        = Σ insumos + combustibles + energía + agua
+     2  Salario Directo       = salario base + vacaciones
+     3  Otros gastos directos
+     4  Gastos asociados a la producción = transporte + amortización
+     5  COSTO TOTAL           = 1 + 2 + 3 + 4
+     6  Gastos Generales y de Administración
+     7  Gastos de Distribución y Ventas
+     8  Gastos Financieros
+     9  Gastos por Financiamiento a la OSDE
+     10 Gastos Tributarios    = tributos s/ salario + impuesto s/ ventas + aporte desarrollo local
+     11 TOTAL DE GASTOS       = 6 + 7 + 8 + 9 + 10
+     12 TOTAL COSTOS Y GASTOS = 5 + 11
+     13 Utilidad              = Precio − 12
+     14 PRECIO O TARIFA
+     15 PRECIO AJUSTADO
+
+   Tributos sobre el salario = Devengado × (Fuerza de Trabajo + Seg. Social + Corto Plazo)
+   Impuesto s/ ventas        = Precio × tasa ventas
+   Aporte desarrollo local   = Precio × tasa local
+
+   El precio se obtiene de dos maneras:
+     · modo "fijo":   se fija el precio y se deduce el margen real.
+     · modo "margen": Precio = costoEstimado·(1+m) / (1 − (ventas+local)·(1+m))
+       donde costoEstimado = 5 + 6 + 7 + 8 + 9 + tributos s/ salario
+       y m = margen como % sobre el costo total (fila 12).
+================================================================================ */
+function calc(f){
+  const r = DB.rates, pct = x => (x||0)/100;
+  const tribSalRate = pct(r.fuerzaTrabajo)+pct(r.segSocial)+pct(r.segSocialCP);
+  const tasaVL = pct(r.ventas)+pct(r.local);
+
+  // Fila 1 · Gasto material
+  const subtotalInsumos = (f.insumos||[]).reduce((s,i)=>s+(i.precio||0)*(i.cantidad||0),0);
+  const fila1 = subtotalInsumos + (f.combustibles||0)+(f.energia||0)+(f.agua||0);
+
+  // Fila 2 · Salario directo (importe = horas × $/hora; los trabajadores son informativos)
+  const salarioBase = (f.salarios||[]).reduce((s,a)=>s+(a.horas||0)*(a.salarioHora||0),0);
+  const vacaciones  = salarioBase*pct(r.vacaciones);
+  const devengado   = salarioBase+vacaciones;
+  const fila2 = devengado;
+
+  const fila3 = f.otrosDirectos||0;                       // Otros gastos directos
+  const fila4 = (f.transporte||0)+(f.amortizacion||0);    // Gastos asociados a la producción
+  const fila5 = fila1+fila2+fila3+fila4;                  // COSTO TOTAL
+
+  const tribSalario = devengado*tribSalRate;              // tributos sobre el salario
+  const fila6 = f.generales||0, fila7 = f.distribucion||0, fila8 = f.financieros||0, fila9 = f.osde||0;
+  const costoEstimado = fila5+fila6+fila7+fila8+fila9+tribSalario;
+
+  // Precio
+  let precio;
+  if(f.modoPrecio==='fijo' && (f.precioObjetivo||0)>0){
+    precio = f.precioObjetivo;
+  } else {
+    const m = pct(f.margen);
+    const denom = 1 - tasaVL*(1+m);
+    precio = denom>0 ? costoEstimado*(1+m)/denom : 0;
+  }
+
+  const impVentas  = precio*pct(r.ventas);
+  const aporteLocal= precio*pct(r.local);
+  const fila10 = tribSalario+impVentas+aporteLocal;       // Gastos Tributarios
+  const fila11 = fila6+fila7+fila8+fila9+fila10;          // TOTAL DE GASTOS
+  const fila12 = fila5+fila11;                            // TOTAL COSTOS Y GASTOS
+  const utilidad = precio-fila12;                         // Fila 13
+  const fila14 = precio;                                  // PRECIO O TARIFA
+  const margenReal = fila12>0 ? utilidad/fila12*100 : 0;  // % de utilidad sobre el costo
+  const ajustado = f.precioAjustado>0 ? f.precioAjustado : Math.round(precio);
+
+  // Análisis de la utilidad
+  const reserva   = utilidad*pct(r.reserva);
+  const utilAntes = utilidad-reserva;
+  const impUtil   = utilAntes*pct(r.utilidades);
+  const utilNeta  = utilAntes-impUtil;
+
+  return {subtotalInsumos,salarioBase,vacaciones,devengado,tribSalario,impVentas,aporteLocal,costoEstimado,
+    fila1,fila2,fila3,fila4,fila5,fila6,fila7,fila8,fila9,fila10,fila11,fila12,
+    utilidad,fila14,margenReal,ajustado,reserva,utilAntes,impUtil,utilNeta};
+}
+function fmt(n,mon){ const s=(n||0).toLocaleString('es-CU',{minimumFractionDigits:2,maximumFractionDigits:2}); return (mon? (mon==='USD'?'USD ':'$ ')+s : s); }
+
+/* ========================= ROUTER ========================= */
+let vista="fichas", edId=null;
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{vista=b.dataset.vista;edId=null;render();});
+function render(){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('activo',b.dataset.vista===vista));
+  document.getElementById('hdrEmpresa').textContent = DB.empresa.nombre||"Empresa";
+  const app=document.getElementById('app');
+  if(vista==='fichas')   app.innerHTML = edId? vEditor():vFichas();
+  if(vista==='catalogo') app.innerHTML = vCatalogo();
+  if(vista==='empresa')  app.innerHTML = vEmpresa();
+  if(vista==='respaldo') app.innerHTML = vRespaldo();
+  if(edId) bindEditor();
+}
+
+/* ========================= VISTA: LISTA FICHAS ========================= */
+function vFichas(){
+  const items = DB.fichas.map(f=>{
+    const c=calc(f);
+    return `<div class="ficha-item" onclick="abrir('${f.id}')">
+      <div class="serv">${esc(f.servicio||'(sin nombre)')}</div>
+      <div class="cli">${esc(f.cliente||'Sin cliente')} · <span class="pill">${f.tipo==='produccion'?'Producción':'Servicio'}</span></div>
+      <div class="precio">${fmt(c.ajustado,f.moneda)}<small> ${f.moneda}</small></div>
+    </div>`;
+  }).join('');
+  return `<div class="card">
+    <div class="top-acciones">
+      <div><h2>Mis Fichas de Costo</h2><div class="sub">Cada ficha calcula el costo real, los impuestos y el precio según el modelo del MFP.</div></div>
+      <button class="btn acento" onclick="nueva()">+ Nueva ficha</button>
+    </div>
+    ${DB.fichas.length? `<div class="lista-ficha">${items}</div>` : `<div class="vacio">Aún no tienes fichas. Crea la primera con “Nueva ficha”.</div>`}
+  </div>`;
+}
+function nueva(){
+  const f={id:id(),servicio:"",cliente:"",tipo:"servicio",um:"unidad",moneda:"CUP",fecha:hoy(),
+    insumos:[],combustibles:0,energia:0,agua:0,salarios:[],otrosDirectos:0,
+    transporte:0,amortizacion:0,generales:0,distribucion:0,financieros:0,osde:0,
+    modoPrecio:'margen',precioObjetivo:0,margen:DB.rates.margenServicio,precioAjustado:0,
+    notas:"",validez:DB.empresa.validez,garantia:DB.empresa.garantia,formaPago:DB.empresa.formaPago,anticipo:DB.empresa.anticipo};
+  DB.fichas.unshift(f); guardar(); edId=f.id; render();
+}
+function abrir(i){ edId=i; render(); }
+
+/* ========================= VISTA: EDITOR ========================= */
+function f(){ return DB.fichas.find(x=>x.id===edId); }
+function vEditor(){
+  const x=f();
+  return `<div class="top-acciones">
+    <button class="btn gris sm" onclick="edId=null;render()">← Volver</button>
+    <span class="pill">${x.tipo==='produccion'?'Producción · margen máx 25%':'Servicio · margen máx 15%'}</span>
+    <button class="btn ok" onclick="imprimirFicha()">Ver ficha de costo (MFP)</button>
+    <button class="btn acento" onclick="imprimirOferta()">Generar oferta</button>
+  </div>
+  <div class="editor-grid">
+    <div>
+      <div class="card">
+        <h2>Datos del trabajo</h2>
+        <div class="grid g2" style="margin-top:10px">
+          <div><label>Servicio / producto</label><input id="servicio" value="${esc(x.servicio)}"></div>
+          <div><label>Cliente</label><input id="cliente" value="${esc(x.cliente)}"></div>
+          <div><label>Tipo (define el margen legal)</label>
+            <select id="tipo"><option value="servicio"${x.tipo==='servicio'?' selected':''}>Servicio (máx 15%)</option><option value="produccion"${x.tipo==='produccion'?' selected':''}>Producción de bienes (máx 25%)</option></select></div>
+          <div><label>Moneda</label><select id="moneda"><option ${x.moneda==='CUP'?'selected':''}>CUP</option><option ${x.moneda==='USD'?'selected':''}>USD</option></select></div>
+          <div><label>Unidad de medida</label><input id="um" value="${esc(x.um||'unidad')}"></div>
+          <div><label>Fecha</label><input type="date" id="fecha" value="${esc(x.fecha||hoy())}"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>1 · Materiales e insumos</h3>
+        <div class="mini">Agrega lo que se instala y se gasta. Puedes elegir del catálogo o escribirlo.</div>
+        <table><thead><tr><th style="width:42%">Material</th><th>U/M</th><th class="num">Precio</th><th class="num">Cantidad</th><th class="num">Importe</th><th></th></tr></thead>
+        <tbody id="tInsumos">${filasInsumos(x)}</tbody></table>
+        <div class="fila-btns"><button class="btn gris sm" onclick="addInsumo()">+ Agregar material</button>
+          <select id="selCat" class="" style="max-width:240px" onchange="addDeCatalogo(this.value);this.value=''">
+            <option value="">… o elegir del catálogo</option>
+            ${DB.catalogo.map(c=>`<option value="${c.id}">${esc(c.nombre)} (${fmt(c.precio)})</option>`).join('')}
+          </select></div>
+        <div class="grid g3" style="margin-top:12px">
+          <div><label>Combustibles y lubricantes</label><input type="number" id="combustibles" value="${x.combustibles||0}"></div>
+          <div><label>Energía</label><input type="number" id="energia" value="${x.energia||0}"></div>
+          <div><label>Agua</label><input type="number" id="agua" value="${x.agua||0}"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2 · Mano de obra</h3>
+        <div class="mini">El importe es <b>horas × $/hora</b>. La cantidad de trabajadores es informativa (igual que en la ficha del MFP).</div>
+        <table><thead><tr><th style="width:40%">Actividad</th><th class="num">Trabaj.</th><th class="num">Horas</th><th class="num">$/hora</th><th class="num">Importe</th><th></th></tr></thead>
+        <tbody id="tSalarios">${filasSalarios(x)}</tbody></table>
+        <div class="fila-btns"><button class="btn gris sm" onclick="addSalario()">+ Agregar actividad</button></div>
+      </div>
+
+      <div class="card">
+        <h3>3 · Otros gastos directos y de producción</h3>
+        <div class="grid g3" style="margin-top:6px">
+          <div><label>Otros gastos directos</label><input type="number" id="otrosDirectos" value="${x.otrosDirectos||0}"><div class="mini">Fila 3</div></div>
+          <div><label>Transporte</label><input type="number" id="transporte" value="${x.transporte||0}"><div class="mini">Fila 4 · asociado a esta obra</div></div>
+          <div><label>Amortización de equipos</label><input type="number" id="amortizacion" value="${x.amortizacion||0}"><div class="mini">Fila 4 · activos fijos usados</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>4 · Gastos indirectos del negocio</h3>
+        <div class="mini">Estimado de cada partida que corresponde a este trabajo. Los impuestos (s/ ventas, desarrollo local y los tributos del salario) se calculan solos.</div>
+        <div class="grid g4" style="margin-top:8px">
+          <div><label>Generales y administración</label><input type="number" id="generales" value="${x.generales||0}"><div class="mini">Fila 6</div></div>
+          <div><label>Distribución y ventas</label><input type="number" id="distribucion" value="${x.distribucion||0}"><div class="mini">Fila 7</div></div>
+          <div><label>Gastos financieros</label><input type="number" id="financieros" value="${x.financieros||0}"><div class="mini">Fila 8</div></div>
+          <div><label>Financiamiento a la OSDE</label><input type="number" id="osde" value="${x.osde||0}"><div class="mini">Fila 9</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>5 · Ganancia y oferta</h3>
+        <div class="grid g2" style="margin-top:6px">
+          <div><label>¿Cómo defines el precio?</label>
+            <select id="modoPrecio"><option value="margen"${x.modoPrecio!=='fijo'?' selected':''}>Aplicar un margen → calcular precio</option><option value="fijo"${x.modoPrecio==='fijo'?' selected':''}>Fijar el precio → ver el margen</option></select></div>
+          ${x.modoPrecio==='fijo'
+            ? `<div><label>Precio que quiero cobrar</label><input type="number" id="precioObjetivo" value="${x.precioObjetivo||0}"><div class="mini" id="avMargen"></div></div>`
+            : `<div><label>Margen de utilidad (% sobre el costo)</label><input type="number" id="margen" value="${x.margen}"><div class="mini" id="avMargen"></div></div>`}
+        </div>
+        <div class="grid g4" style="margin-top:10px">
+          <div><label>Precio ajustado (redondeo)</label><input type="number" id="precioAjustado" value="${x.precioAjustado||0}"><div class="mini">0 = usar el calculado</div></div>
+          <div><label>Validez (días)</label><input type="number" id="validez" value="${x.validez||15}"></div>
+          <div><label>Garantía (meses)</label><input type="number" id="garantia" value="${x.garantia||6}"></div>
+          <div><label>Anticipo (%)</label><input type="number" id="anticipo" value="${x.anticipo||50}"></div>
+          <div style="grid-column:1/3"><label>Forma de pago</label><input id="formaPago" value="${esc(x.formaPago||'')}"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px"><button class="btn acento" onclick="eliminar('${x.id}')">Eliminar ficha</button>
+      <button class="btn gris" onclick="duplicar('${x.id}')">Duplicar</button></div>
+    </div>
+
+    <div id="panel"></div>
+  </div>`;
+}
+function filasInsumos(x){
+  return x.insumos.map((i,k)=>`<tr>
+    <td><input data-t="ins" data-k="${k}" data-f="nombre" value="${esc(i.nombre)}"></td>
+    <td><input data-t="ins" data-k="${k}" data-f="um" value="${esc(i.um)}" style="width:70px"></td>
+    <td><input type="number" data-t="ins" data-k="${k}" data-f="precio" value="${i.precio}" class="num" style="width:95px"></td>
+    <td><input type="number" data-t="ins" data-k="${k}" data-f="cantidad" value="${i.cantidad}" class="num" style="width:70px"></td>
+    <td class="num imp">${fmt((i.precio||0)*(i.cantidad||0))}</td>
+    <td><button class="tachar" onclick="delIns(${k})">×</button></td></tr>`).join('') ||
+    `<tr><td colspan="6" class="mini" style="padding:10px">Sin materiales todavía.</td></tr>`;
+}
+function filasSalarios(x){
+  return x.salarios.map((a,k)=>`<tr>
+    <td><input data-t="sal" data-k="${k}" data-f="actividad" value="${esc(a.actividad)}"></td>
+    <td><input type="number" data-t="sal" data-k="${k}" data-f="trabajadores" value="${a.trabajadores}" class="num" style="width:60px"></td>
+    <td><input type="number" data-t="sal" data-k="${k}" data-f="horas" value="${a.horas}" class="num" style="width:60px"></td>
+    <td><input type="number" data-t="sal" data-k="${k}" data-f="salarioHora" value="${a.salarioHora}" class="num" style="width:75px"></td>
+    <td class="num imp">${fmt((a.horas||0)*(a.salarioHora||0))}</td>
+    <td><button class="tachar" onclick="delSal(${k})">×</button></td></tr>`).join('') ||
+    `<tr><td colspan="6" class="mini" style="padding:10px">Sin actividades todavía.</td></tr>`;
+}
+function bindEditor(){
+  const x=f();
+  const campos=['servicio','cliente','tipo','moneda','um','fecha','combustibles','energia','agua',
+    'otrosDirectos','transporte','amortizacion','generales','distribucion','financieros','osde',
+    'margen','precioObjetivo','precioAjustado','validez','garantia','anticipo','formaPago'];
+  campos.forEach(c=>{const el=document.getElementById(c); if(el) el.oninput=()=>{
+    let v=el.value; if(el.type==='number') v=parseFloat(v)||0;
+    x[c]=v;
+    if(c==='tipo'){ x.margen = (v==='produccion'?DB.rates.margenProduccion:DB.rates.margenServicio); const me=document.getElementById('margen'); if(me) me.value=x.margen; }
+    guardar(); pintarPanel();
+  };});
+  const mp=document.getElementById('modoPrecio'); if(mp) mp.onchange=()=>{ x.modoPrecio=mp.value; guardar(); render(); };
+  document.querySelectorAll('[data-t]').forEach(el=>el.oninput=()=>{
+    const arr = el.dataset.t==='ins'? x.insumos : x.salarios;
+    let v=el.value; if(el.type==='number') v=parseFloat(v)||0;
+    const row = arr[el.dataset.k]; row[el.dataset.f]=v;
+    const tr = el.closest('tr'), impCell = tr && tr.querySelector('.imp');
+    if(impCell){ const imp = el.dataset.t==='ins' ? (row.precio||0)*(row.cantidad||0)
+      : (row.horas||0)*(row.salarioHora||0); impCell.textContent = fmt(imp); }
+    guardar(); pintarPanel();
+  });
+  pintarPanel();
+}
+function refrescarImportes(){ document.getElementById('tInsumos').innerHTML=filasInsumos(f()); document.getElementById('tSalarios').innerHTML=filasSalarios(f()); bindEditor(); }
+function addInsumo(){ f().insumos.push({nombre:"",um:"unidad",precio:0,cantidad:1}); guardar(); refrescarImportes(); }
+function addSalario(){ f().salarios.push({actividad:"",trabajadores:1,horas:1,salarioHora:0}); guardar(); refrescarImportes(); }
+function addDeCatalogo(cid){ if(!cid)return; const c=DB.catalogo.find(c=>c.id===cid); if(c){f().insumos.push({nombre:c.nombre,um:c.um,precio:c.precio,cantidad:1});guardar();refrescarImportes();pintarPanel();} }
+function delIns(k){ f().insumos.splice(k,1); guardar(); refrescarImportes(); pintarPanel(); }
+function delSal(k){ f().salarios.splice(k,1); guardar(); refrescarImportes(); pintarPanel(); }
+function duplicar(i){ const o=DB.fichas.find(x=>x.id===i); const n=JSON.parse(JSON.stringify(o)); n.id=id(); n.servicio=(o.servicio||'')+' (copia)'; DB.fichas.unshift(n); guardar(); edId=n.id; render(); }
+function eliminar(i){ if(confirm('¿Eliminar esta ficha?')){ DB.fichas=DB.fichas.filter(x=>x.id!==i); guardar(); edId=null; render(); } }
+
+function pintarPanel(){
+  const x=f(), c=calc(x), mon=x.moneda;
+  const tope = x.tipo==='produccion'?DB.rates.margenProduccion:DB.rates.margenServicio;
+  const supera = c.margenReal>tope+0.01;
+  const av=document.getElementById('avMargen');
+  if(av){ av.innerHTML = (x.modoPrecio==='fijo')
+      ? (supera?`<span style="color:#c0392b">Margen real ${c.margenReal.toFixed(1)}% · ⚠ supera el tope (${tope}%)</span>`:`Margen real: ${c.margenReal.toFixed(1)}% (tope ${tope}%)`)
+      : (x.margen>tope?`<span style="color:#c0392b">⚠ Supera el tope legal (${tope}%)</span>`:`Tope legal: ${tope}%`); }
+  document.getElementById('panel').innerHTML = `<div class="panel-calc">
+    <div style="font-size:13px;color:#aecbe8;margin-bottom:8px">RESUMEN DE LA FICHA</div>
+    <div class="row"><span>Materiales (1)</span><span class="v">${fmt(c.fila1,mon)}</span></div>
+    <div class="row"><span>Mano de obra (2)</span><span class="v">${fmt(c.fila2,mon)}</span></div>
+    <div class="row"><span>Otros directos (3+4)</span><span class="v">${fmt(c.fila3+c.fila4,mon)}</span></div>
+    <div class="row"><span><b>Costo total (5)</b></span><span class="v">${fmt(c.fila5,mon)}</span></div>
+    <div class="row"><span>Gastos indirectos (6-9)</span><span class="v">${fmt(c.fila6+c.fila7+c.fila8+c.fila9,mon)}</span></div>
+    <div class="row"><span>Impuestos (10)</span><span class="v">${fmt(c.fila10,mon)}</span></div>
+    <div class="row"><span>Ganancia (${c.margenReal.toFixed(1)}%)</span><span class="v" style="${supera?'color:#ffb4a8':''}">${fmt(c.utilidad,mon)}</span></div>
+    <div class="row tot"><span>PRECIO</span><span class="v">${fmt(c.ajustado,mon)}</span></div>
+    <div style="margin-top:10px"><small>Te queda neto (tras reserva e impuesto s/ utilidades): <b style="color:#9be8b8">${fmt(c.utilNeta,mon)}</b></small></div>
+  </div>`;
+}
+
+/* ========================= IMPRESIÓN ========================= */
+function imprimir(html){ document.getElementById('impresion').innerHTML=html; window.print(); }
+function imprimirFicha(){
+  const x=f(), c=calc(x), mon=x.moneda, e=DB.empresa, r=DB.rates;
+  const insumos=x.insumos.map(i=>`<tr><td>${esc(i.nombre)}</td><td>${esc(i.um)}</td><td class="num">${fmt(i.precio)}</td><td class="num">${i.cantidad}</td><td class="num">${fmt(i.precio*i.cantidad)}</td></tr>`).join('');
+  const sal=x.salarios.map(a=>`<tr><td>${esc(a.actividad)}</td><td class="num">${a.trabajadores}</td><td class="num">${a.horas}</td><td class="num">${fmt(a.salarioHora)}</td><td class="num">${fmt((a.horas||0)*(a.salarioHora||0))}</td></tr>`).join('');
+  const fila=(n,t,v,cls='')=>`<tr class="${cls}"><td style="width:55px">${n}</td><td>${t}</td><td class="num">${v===''?'':fmt(v,mon)}</td></tr>`;
+  imprimir(`<div class="doc">
+    <div style="text-align:center;margin-bottom:6px"><b>MINISTERIO DE FINANZAS Y PRECIOS</b></div>
+    <h2>FICHA DE COSTOS Y GASTOS DE PRODUCTOS Y SERVICIOS PARA LA EVALUACIÓN DE PRECIOS Y TARIFAS</h2>
+    <div style="text-align:center;font-size:11px;margin-bottom:10px">Resolución 148/2023 · ${esc(e.nombre)} · NIT ${esc(e.nit)}</div>
+    <table style="margin-bottom:10px"><tr><td><b>Producto o servicio:</b> ${esc(x.servicio)}</td><td><b>Cliente:</b> ${esc(x.cliente)}</td><td><b>U/M:</b> ${esc(x.um)}</td><td><b>Fecha:</b> ${esc(x.fecha)}</td></tr></table>
+    <table>
+      <tr class="seccion"><td colspan="3">CONCEPTOS DEL MODELO OFICIAL</td></tr>
+      ${fila('1','Gasto Material',c.fila1)}
+      ${fila('2','Salario Directo (con vacaciones)',c.fila2)}
+      ${fila('3','Otros Gastos Directos',c.fila3)}
+      ${fila('4','Gastos asociados a la producción (transporte + amortización)',c.fila4)}
+      ${fila('5','COSTO TOTAL (1+2+3+4)',c.fila5,'seccion')}
+      ${fila('6','Gastos Generales y de Administración',c.fila6)}
+      ${fila('7','Gastos de Distribución y Ventas',c.fila7)}
+      ${fila('8','Gastos Financieros',c.fila8)}
+      ${fila('9','Gastos por Financiamiento a la OSDE',c.fila9)}
+      ${fila('10','Gastos Tributarios (salario + ventas + desarrollo local)',c.fila10)}
+      ${fila('11','TOTAL DE GASTOS (6 a 10)',c.fila11)}
+      ${fila('12','TOTAL DE COSTOS Y GASTOS (5+11)',c.fila12,'seccion')}
+      ${fila('13','Utilidad ('+c.margenReal.toFixed(2)+'% sobre el costo)',c.utilidad)}
+      ${fila('14','PRECIO O TARIFA',c.fila14,'total')}
+      ${fila('15','PRECIO O TARIFA UNITARIO AJUSTADO',c.ajustado,'total')}
+    </table>
+    <div style="display:flex;gap:14px;margin-top:12px">
+      <table style="flex:1"><tr class="seccion"><td colspan="5">Desglose de insumos</td></tr>
+        <tr><th>Material</th><th>U/M</th><th class="num">Precio</th><th class="num">Cant.</th><th class="num">Importe</th></tr>${insumos}
+        <tr class="seccion"><td colspan="4">Subtotal gasto material</td><td class="num">${fmt(c.fila1,mon)}</td></tr></table>
+    </div>
+    <table style="margin-top:10px"><tr class="seccion"><td colspan="5">Desglose de salario</td></tr>
+      <tr><th>Actividad</th><th class="num">Trab.</th><th class="num">Horas</th><th class="num">$/h</th><th class="num">Importe</th></tr>${sal}
+      <tr><td colspan="4">Salario base</td><td class="num">${fmt(c.salarioBase,mon)}</td></tr>
+      <tr><td colspan="4">Vacaciones (${r.vacaciones}%)</td><td class="num">${fmt(c.vacaciones,mon)}</td></tr>
+      <tr><td colspan="4"><b>Devengado</b></td><td class="num">${fmt(c.devengado,mon)}</td></tr>
+      <tr><td colspan="4">Imp. Fuerza de Trabajo (${r.fuerzaTrabajo}%) + Seg. Social (${r.segSocial}%) + Corto Plazo (${r.segSocialCP}%)</td><td class="num">${fmt(c.tribSalario,mon)}</td></tr></table>
+    <table style="margin-top:10px"><tr class="seccion"><td colspan="2">Cálculos auxiliares</td></tr>
+      <tr><td>Costo estimado (sin impuestos s/ ventas ni utilidad)</td><td class="num">${fmt(c.costoEstimado,mon)}</td></tr>
+      <tr><td>Aporte para el Desarrollo Local (${r.local}%)</td><td class="num">${fmt(c.aporteLocal,mon)}</td></tr>
+      <tr><td>Impuesto sobre las Ventas (${r.ventas}%)</td><td class="num">${fmt(c.impVentas,mon)}</td></tr>
+      <tr><td>Gastos totales</td><td class="num">${fmt(c.fila12,mon)}</td></tr>
+      <tr class="total"><td>Ingresos totales (precio)</td><td class="num">${fmt(c.fila14,mon)}</td></tr></table>
+    <table style="margin-top:10px"><tr class="seccion"><td colspan="2">Análisis de utilidad</td></tr>
+      <tr><td>Utilidad (margen de utilidad)</td><td class="num">${fmt(c.utilidad,mon)}</td></tr>
+      <tr><td>Reserva para contingencias (${r.reserva}%)</td><td class="num">${fmt(c.reserva,mon)}</td></tr>
+      <tr><td>Utilidad antes de impuestos</td><td class="num">${fmt(c.utilAntes,mon)}</td></tr>
+      <tr><td>Impuesto sobre utilidades (${r.utilidades}%)</td><td class="num">${fmt(c.impUtil,mon)}</td></tr>
+      <tr class="total"><td>Utilidad después de impuestos</td><td class="num">${fmt(c.utilNeta,mon)}</td></tr></table>
+  </div>`);
+}
+function imprimirOferta(){
+  const x=f(), c=calc(x), mon=x.moneda, e=DB.empresa;
+  // En la oferta (ANEXO) se muestran los materiales y el transporte a su importe real;
+  // la mano de obra es la diferencia hasta el precio (absorbe amortización, gastos
+  // indirectos, impuestos y utilidad), tal como en la oferta original al cliente.
+  const insumos=x.insumos.map(i=>`<tr><td>${esc(i.nombre)}</td><td class="num">${esc(i.um)}</td><td class="num">${i.cantidad}</td><td class="num">${fmt(i.precio*i.cantidad,mon)}</td></tr>`).join('');
+  const horas = (x.salarios||[]).reduce((s,a)=>s+(a.horas||0),0);
+  const manoObra = c.ajustado - c.fila1 - (x.transporte||0);
+  imprimir(`<div class="doc">
+    <div class="empresa">
+      <div><b style="font-size:16px">${esc(e.nombre)}</b><br>${esc(e.direccion)}</div>
+      <div style="text-align:right">NIT: ${esc(e.nit)} · Sucursal: ${esc(e.sucursal)}<br>Cuenta MN: ${esc(e.cuenta)}<br>Tel: ${esc(e.telefono)}</div>
+    </div>
+    <h2>OFERTA: ${esc(x.servicio).toUpperCase()}</h2>
+    <div style="text-align:center;margin-bottom:10px">Cliente: <b>${esc(x.cliente)}</b> · Fecha: ${esc(x.fecha)}</div>
+    <table>
+      <tr><th>Equipamiento / elemento</th><th class="num">U/M</th><th class="num">Cant.</th><th class="num">Importe</th></tr>
+      ${insumos}
+      ${(x.transporte||0)>0?`<tr><td>Transporte</td><td class="num">KM</td><td class="num">1</td><td class="num">${fmt(x.transporte,mon)}</td></tr>`:''}
+      <tr><td>Mano de obra e instalación</td><td class="num">HR</td><td class="num">${horas||'—'}</td><td class="num">${fmt(manoObra,mon)}</td></tr>
+      <tr class="total"><td colspan="3">TOTAL DE LA OFERTA</td><td class="num">${fmt(c.ajustado,mon)}</td></tr>
+    </table>
+    <div class="pie">
+      <b>Servicios incluidos:</b> asistencia técnica, montaje, instalación y puesta en marcha.<br>
+      <b>Oferta válida por ${x.validez} días.</b> Solicitar una nueva si concluye este plazo.<br>
+      <b>Garantía:</b> ${x.garantia} meses a partir de la puesta en marcha contra defectos de fabricación.<br>
+      <b>Forma de pago:</b> ${esc(x.formaPago)} · <b>Anticipo:</b> ${x.anticipo}%.<br>
+      <small>Esta oferta se ha elaborado tomando como base los datos facilitados por el cliente, por lo que ${esc(e.nombre)} no asume responsabilidad por errores, omisiones o insuficiencias en dichos datos.</small>
+    </div>
+  </div>`);
+}
+
+/* ========================= VISTA: CATÁLOGO ========================= */
+function vCatalogo(){
+  const rows=DB.catalogo.map((c,k)=>`<tr>
+    <td><input value="${esc(c.nombre)}" oninput="catEdit(${k},'nombre',this.value)"></td>
+    <td><input value="${esc(c.um)}" style="width:90px" oninput="catEdit(${k},'um',this.value)"></td>
+    <td><input type="number" value="${c.precio}" class="num" style="width:130px" oninput="catEdit(${k},'precio',parseFloat(this.value)||0)"></td>
+    <td><button class="tachar" onclick="catDel(${k})">×</button></td></tr>`).join('');
+  return `<div class="card">
+    <div class="top-acciones"><div><h2>Catálogo de materiales</h2><div class="sub">Guarda aquí tus materiales con su precio. Después los eliges al armar una ficha sin reescribirlos.</div></div>
+    <button class="btn acento" onclick="catAdd()">+ Agregar material</button></div>
+    <table><thead><tr><th>Material</th><th>U/M</th><th class="num">Precio</th><th></th></tr></thead><tbody>${rows||'<tr><td colspan="4" class="mini">Catálogo vacío.</td></tr>'}</tbody></table>
+  </div>`;
+}
+function catAdd(){ DB.catalogo.push({id:id(),nombre:"",um:"unidad",precio:0}); guardar(); render(); }
+function catEdit(k,f,v){ DB.catalogo[k][f]=v; guardar(); }
+function catDel(k){ DB.catalogo.splice(k,1); guardar(); render(); }
+
+/* ========================= VISTA: EMPRESA ========================= */
+function vEmpresa(){
+  const e=DB.empresa, r=DB.rates;
+  const I=(id,lab,val,t='text')=>`<div><label>${lab}</label><input id="${id}" type="${t}" value="${esc(val)}"></div>`;
+  const R=(id,lab,val)=>`<div><label>${lab} (%)</label><input id="${id}" type="number" step="0.01" value="${val}"></div>`;
+  return `<div class="card">
+    <h2>Datos de la empresa</h2><div class="sub">Aparecen en el encabezado de cada oferta.</div>
+    <div class="grid g2" style="margin-top:10px">
+      ${I('e_nombre','Nombre',e.nombre)}${I('e_nit','NIT',e.nit)}
+      ${I('e_sucursal','Sucursal',e.sucursal)}${I('e_telefono','Teléfono',e.telefono)}
+      ${I('e_cuenta','Cuenta bancaria',e.cuenta)}
+      <div style="grid-column:1/3">${I('e_direccion','Dirección',e.direccion)}</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Tasas de impuestos y márgenes</h2><div class="sub">Configuradas con las tasas cubanas actuales (modelo del MFP). Cámbialas solo si tu asesor económico lo indica.</div>
+    <div class="grid g4" style="margin-top:10px">
+      ${R('r_ventas','Impuesto sobre Ventas',r.ventas)}
+      ${R('r_local','Aporte Desarrollo Local',r.local)}
+      ${R('r_fuerzaTrabajo','Imp. Fuerza de Trabajo',r.fuerzaTrabajo)}
+      ${R('r_segSocial','Contrib. Seg. Social',r.segSocial)}
+      ${R('r_segSocialCP','Seg. Social Corto Plazo',r.segSocialCP)}
+      ${R('r_vacaciones','Vacaciones',r.vacaciones)}
+      ${R('r_utilidades','Impuesto s/ Utilidades',r.utilidades)}
+      ${R('r_reserva','Reserva contingencias',r.reserva)}
+      ${R('r_margenServicio','Margen máx · Servicios',r.margenServicio)}
+      ${R('r_margenProduccion','Margen máx · Producción',r.margenProduccion)}
+    </div>
+    <div style="margin-top:16px"><button class="btn ok" onclick="guardarEmpresa()">Guardar cambios</button></div>
+  </div>`;
+}
+function guardarEmpresa(){
+  const g=id=>document.getElementById(id).value;
+  const n=id=>parseFloat(document.getElementById(id).value)||0;
+  Object.assign(DB.empresa,{nombre:g('e_nombre'),nit:g('e_nit'),sucursal:g('e_sucursal'),telefono:g('e_telefono'),cuenta:g('e_cuenta'),direccion:g('e_direccion')});
+  Object.assign(DB.rates,{ventas:n('r_ventas'),local:n('r_local'),fuerzaTrabajo:n('r_fuerzaTrabajo'),segSocial:n('r_segSocial'),segSocialCP:n('r_segSocialCP'),vacaciones:n('r_vacaciones'),utilidades:n('r_utilidades'),reserva:n('r_reserva'),margenServicio:n('r_margenServicio'),margenProduccion:n('r_margenProduccion')});
+  guardar(); alert('Guardado.'); render();
+}
+
+/* ========================= VISTA: RESPALDO ========================= */
+function vRespaldo(){
+  return `<div class="card">
+    <h2>Respaldo de datos</h2>
+    <div class="sub">Tus datos viven en esta computadora. Exporta de vez en cuando para no perderlos si formateas la PC o quieres pasarlos a otra.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn" onclick="exportar()">⬇ Exportar respaldo (.json)</button>
+      <label class="btn gris" style="cursor:pointer">⬆ Importar respaldo<input type="file" accept=".json" style="display:none" onchange="importar(event)"></label>
+    </div>
+    <div class="aviso" style="margin-top:16px">Tienes <b>${DB.fichas.length}</b> fichas y <b>${DB.catalogo.length}</b> materiales en el catálogo.</div>
+  </div>`;
+}
+function exportar(){
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='respaldo-fichas-'+hoy()+'.json'; a.click();
+}
+function importar(ev){
+  const file=ev.target.files[0]; if(!file)return;
+  const rd=new FileReader();
+  rd.onload=()=>{ try{ DB=JSON.parse(rd.result); guardar(); alert('Respaldo importado.'); render(); }catch(e){ alert('Archivo inválido.'); } };
+  rd.readAsText(file);
+}
+
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+render();
+</script>
+</body>
+</html>
